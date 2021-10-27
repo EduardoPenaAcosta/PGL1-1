@@ -18,7 +18,7 @@ public class Main {
         int OpenTimesExecutable = 0;
         String navigator = "";
 
-        System.out.println("Comienza el proceso...");
+        System.out.println("Start the process...");
 
         if (args.length == 0) {
 
@@ -26,8 +26,6 @@ public class Main {
             * No hemos detectado argumentos junto a la ejecución del comando, así que
             * mando una notificación, se abren scanners, se piden datos y se almacena el comando.
             */
-
-
 
             System.out.println("No args introduced, please type in in the console the times you want to open the app.");
             Scanner inputScanner = new Scanner(System.in);
@@ -68,13 +66,17 @@ public class Main {
             * que se abra el programa, soltará también el código de error en caso de que algo pase
             */
 
+
+            System.out.println("The process is working");
             for(int i = 0; i < OpenTimesExecutable; i++){
                 process = ProcessBuilder.start();
+                while(process.isAlive()) {
+                    process.waitFor();
+
+                }
             }
 
-
-            int exitCode = process.waitFor();
-            System.out.println("Process error code -> " + exitCode);
+            System.out.println("The process has finished");
 
         }catch(Error | IOException | InterruptedException e){
             e.printStackTrace();
