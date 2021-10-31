@@ -87,6 +87,9 @@ public class Main {
             System.out.println("La hora de inicio es: " + java.time.LocalTime.now().toString());
 
             System.out.println("The process is working");
+
+            // Aquí comprobará si el proceso sigue abierto, en caso de que siga abierto
+            // habrá un timeout de 500ms y después cerrará el programa
             for(Process process : processList){
                 while(process.isAlive()){
                     process.waitFor(500, TimeUnit.MILLISECONDS);
