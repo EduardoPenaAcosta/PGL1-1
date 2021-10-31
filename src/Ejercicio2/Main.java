@@ -1,5 +1,12 @@
 package Ejercicio2;
 
+/**
+ * Desarrolla una segunda aplicación en Java que abra el número de ventanas del navegador de tu
+ * elección que indique el usuario. Puede indicarlo como entrada de teclado o como argumento del
+ * ejecutable. Los procesos deben terminar 500 ms después de arrancar. Cada proceso debe indicar
+ * la hora de inicio y la hora de finalización.
+ * */
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,11 +18,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ProcessBuilder ProcessBuilder = new ProcessBuilder();
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
         int OpenTimesExecutable = 0;
         String navigator = "";
-
-        System.out.println("Start the process...");
 
         if (args.length == 0) {
 
@@ -35,7 +41,7 @@ public class Main {
             System.out.print("Choose web browser: ");
             navigator = inputScanner.nextLine();
 
-            ProcessBuilder.command("open", "-n", "-a", navigator);
+            processBuilder.command("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
 
             inputScanner.close();
 
@@ -53,34 +59,46 @@ public class Main {
             OpenTimesExecutable = parseInt(args[0]);
             navigator = args[1];
 
-            ProcessBuilder.command("open", "-n", "-a", navigator);
+            //processBuilder.command("open", "-n", "-a", navigator);
+
+            processBuilder.command("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
+
+
         }
 
         try {
-            ArrayList<Process> processList = new ArrayList<>();
+
             /*
-             * Se ha creado un bucle que abrirá cuantas veces se haya pedido
-             * que se abra el programa, soltará también el código de error en caso de que algo pase
-             * Y dentro del bucle se ha agregado un nuevo bucle donde esperaremos que el proceso se termine.
+             * Se ha creado un bucle que abrirá cuantas veces se haya pedido, se almacenará el proceso mediante un
+             * ArrayList, se arrancará las veces indicadas, donde almacenaremos a la vez el proceso en ArrayList
+             * comprobará si está arrancado y cuando termine
              */
 
-            System.out.println("The process is working");
+            ArrayList<Process> processList = new ArrayList<Process>();
+            System.out.println("The process is starting...");
+
             for (int i = 0; i < OpenTimesExecutable; i++) {
-                processList.add(ProcessBuilder.start());
+                Process process = processBuilder.start();
+                processList.add(process);
+
             }
 
-            TimeUnit.MILLISECONDS.sleep(500);
-            for( Process process: processList){
+
+            System.out.println("La hora de inicio es: " + java.time.LocalTime.now().toString());
+
+            System.out.println("The process is working");
+            for(Process process : processList){
                 while(process.isAlive()){
+                    process.waitFor(500, TimeUnit.MILLISECONDS);
                     process.destroy();
-                    process.waitFor();
                 }
             }
             System.out.println("The process has finished");
+            System.out.println("La hora de final es: " + java.time.LocalTime.now().toString());
 
         } catch (Error | IOException | InterruptedException e) {
             e.printStackTrace();
-            System.out.println("Le falta algún argumento o no ha introducido alguno de los datos correctamente.");
+            System.out.println("Somehow isn't working.");
         }
     }
 
